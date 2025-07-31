@@ -1,0 +1,8 @@
+.line-chart {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(1, 38, 74, 0.9);
+    border-radius: 15px;
+}
+
