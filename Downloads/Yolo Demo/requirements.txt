@@ -1,0 +1,20 @@
+# Core dependencies for Exercise Tracker
+ultralytics>=8.3.0
+opencv-python>=4.6.0
+numpy>=1.23.0
+matplotlib>=3.3.0
+torch>=1.8.0
+torchvision>=0.9.0
+pillow>=7.1.2
+pyyaml>=5.3.1
+requests>=2.23.0
+scipy>=1.4.1
+psutil
+
+# Data processing and analysis
+pandas>=1.3.0   # For better data manipulation
+jupyter>=1.0.0  # For data analysis notebooks
+
+# Optional: Enhanced ML capabilities
+# scikit-learn>=1.0.0  # Traditional ML algorithms
+# seaborn>=0.11.0      # Statistical visualization
