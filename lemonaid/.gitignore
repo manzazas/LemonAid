@@ -18,6 +18,10 @@ pnpm-lock.yaml
 dist/
 build/
 
+# ignore node_modules in subpackages
+backend/node_modules/
+frontend/node_modules/
+
 # logs
 logs
 *.log
