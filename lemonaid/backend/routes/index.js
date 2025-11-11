@@ -5,5 +5,11 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.get('/api/test-get', function(req, res, next) {
+  res.json({message: 'Hello from the backend!'});
+});
+router.post('/api/test-post', function(req, res, next) {
+  res.json({message: 'POST request received!'});
+});
 
 module.exports = router;
