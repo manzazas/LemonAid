@@ -10,6 +10,6 @@ router.get('/api/test-get', function(req, res, next) {
 });
 router.post('/api/test-post', function(req, res, next) {
   res.json({message: 'POST request received!'});
-});
+})
 
 module.exports = router;
