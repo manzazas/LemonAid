@@ -5,7 +5,12 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-
+  fetch ("/api/test-get")
+  .then(response => response.json())
+  .then(json => console.log(json));
+fetch ("/api/url-post", {method: "POST"})
+  .then(response => response.json())
+  .then(json => console.log(json)); 
   return (
     <>
       <div>
