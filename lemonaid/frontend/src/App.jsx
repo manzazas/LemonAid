@@ -5,12 +5,21 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [url, setUrl] = useState("");
   fetch ("/api/test-get")
   .then(response => response.json())
   .then(json => console.log(json));
-fetch ("/api/url-post", {method: "POST"})
+
+  fetch("/api/url-post", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({url: url})
+  })
   .then(response => response.json())
-  .then(json => console.log(json)); 
+  .then(json => console.log(json));
+
   return (
     <>
       <div>
@@ -26,7 +35,15 @@ fetch ("/api/url-post", {method: "POST"})
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Paste product URL"
+        />
+
         <p>
+          {" "}
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
       </div>
@@ -34,7 +51,7 @@ fetch ("/api/url-post", {method: "POST"})
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
 export default App
