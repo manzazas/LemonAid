@@ -5,6 +5,7 @@ function App() {
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [result, setResult] = useState(null)
 
   const handleAnalyze = async () => {
     // Basic URL validation
@@ -20,10 +21,11 @@ function App() {
     }
 
     setError('')
+    setResult(null)
     setLoading(true)
 
     try {
-      // TODO: Replace with your actual backend endpoint
+      // Call api/analyze endpoint on the backend
       const response = await fetch('http://localhost:3000/api/analyze', {
         method: 'POST',
         headers: {
@@ -39,7 +41,10 @@ function App() {
       const data = await response.json()
       console.log('Analysis result:', data)
       
-      // TODO: Display the Lemon Score results here later
+      // Display the results/analysis here
+      if (data.success && data.data) {
+        setResult(data.data)
+      }
       
     } catch (err) {
       setError(err.message || 'An error occurred while analyzing the listing')
@@ -83,6 +88,25 @@ function App() {
         {error && (
           <div className="error-message">
             {error}
+          </div>
+        )}
+
+        {result && (
+          <div className="result-container">
+            <h2 className="result-title">Analysis Complete</h2>
+            <div className="lemon-score">
+              <div className="score-label">Lemon Score</div>
+              <div className="score-value">{result.lemonScore}</div>
+            </div>
+            <div className="reasons">
+              <h3>Key Factors:</h3>
+              <ul>
+                {result.reasons.map((reason, index) => (
+                  <li key={index}>{reason}</li>
+                ))}
+              </ul>
+            </div>
+            <p className="status-message">{result.status}</p>
           </div>
         )}
       </div>

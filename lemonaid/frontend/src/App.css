@@ -102,7 +102,78 @@
   font-size: 0.9rem;
 }
 
-/* Responsive design */
+.result-container {
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #1e293b;
+  border-radius: 12px;
+  border: 2px solid #334155;
+  text-align: left;
+}
+
+.result-title {
+  font-size: 1.5rem;
+  color: #fbbf24;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.lemon-score {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.score-value {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.reasons {
+  margin-bottom: 1.5rem;
+}
+
+.reasons h3 {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  margin-bottom: 0.75rem;
+}
+
+.reasons ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reasons li {
+  padding: 0.5rem 0;
+  color: #cbd5e1;
+  border-bottom: 1px solid #334155;
+}
+
+.reasons li:last-child {
+  border-bottom: none;
+}
+
+.reasons li:before {
+  content: "⚠️ ";
+  margin-right: 0.5rem;
+}
+
+.status-message {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 1rem;
+}
+
 @media (max-width: 600px) {
   .project-title {
     font-size: 3rem;
