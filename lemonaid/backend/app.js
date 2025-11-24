@@ -4,10 +4,14 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import { connectDB } from "./config/db.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+connectDB(); // <<< connects to Mongo
 
 import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
-
+import externalRouter from './routes/external.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -24,7 +28,6 @@ app.use(cookieParser());
 app.use(expressStatic(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -40,7 +43,7 @@ app.use((err, req, res, next) => {
   // render the error page
   res.status(err.status || 500);
   // If the request accepts JSON or targets an API route, return JSON
-  if (req.accepts('json') || req.path.startsWith('/api') || req.path.startsWith('/users')) {
+  if (req.accepts('json') || req.path.startsWith('/api')) {
     return res.json({
       success: false,
       message: err.message,
