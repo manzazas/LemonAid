@@ -28,6 +28,8 @@ app.use(cookieParser());
 app.use(expressStatic(join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// eBay API proxy routes
+// eBay routes removed — using Rainforest API via main route
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
