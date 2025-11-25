@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 const listingSchema = new mongoose.Schema({
-  source: { type: String, default: "etsy" },
+  source: { type: String, default: "rainforest" },
   listingId: { type: String, required: true },
   url: String,
 
