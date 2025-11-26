@@ -1,0 +1,5 @@
+# Clean placeholder for docker-compose. The original docker-compose.yml was malformed.
+# Use this file as a starting point to add services.
+
+version: '3.8'
+services: {}

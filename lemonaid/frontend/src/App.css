@@ -1,11 +1,28 @@
+html, body {
+  height: 100%;
+}
+
+/* sensible base font size for consistent sizing */
+html { font-size: 16px; }
+body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; color: #e6eef8; background: #111218; }
 #root {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  max-width: none; 
+  margin: 0;
+  
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-sizing: border-box;
+}
+
+.main-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+/* Ensure content doesn't sit under a sticky header */
+.content {
+  padding-top: 1rem;
 }
 
 .app-container {
@@ -17,36 +34,40 @@
 }
 
 .project-title {
-  font-size: 4rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin: 0.4rem 0 0.6rem;
   color: #fbbf24;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
 }
 
 .subtitle {
-  font-size: 1.1rem;
-  color: #888;
-  margin-bottom: 3rem;
+  font-size: 1rem;
+  color: #bfc7d6;
+  margin-bottom: 1.5rem;
   font-weight: 300;
 }
 
 .input-container {
   display: flex;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin: 0.75rem auto 1rem;
   width: 100%;
+  max-width: 720px;
+  justify-content: center;
 }
 
 .url-input {
   flex: 1;
-  padding: 0.875rem 1.25rem;
-  font-size: 1rem;
-  border: 2px solid #333;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border: 2px solid rgba(255,255,255,0.06);
   border-radius: 8px;
-  background-color: #1a1a1a;
+  background-color: rgba(255,255,255,0.02);
   color: #fff;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.12s ease;
+  box-sizing: border-box;
+  line-height: 1.35;
 }
 
 .url-input:focus {
@@ -64,15 +85,15 @@
 }
 
 .run-button {
-  padding: 0.875rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 0.7rem 1.6rem;
+  font-size: 0.98rem;
+  font-weight: 700;
   background-color: #fbbf24;
-  color: #1a1a1a;
+  color: #0b1220;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
   white-space: nowrap;
 }
 
@@ -103,18 +124,51 @@
 }
 
 .result-container {
-  margin-top: 2rem;
-  padding: 2rem;
-  background-color: #1e293b;
-  border-radius: 12px;
-  border: 2px solid #334155;
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  /* use a solid panel color to avoid full-width translucent banding */
+  background-color: #0f1113; /* slightly lighter than page background */
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
   text-align: left;
 }
 
+/* Make product-meta wrap cleanly on small screens */
+.product-meta { display:block; color: #cbd5e1; margin-top: .5rem; }
+
+/* Raw JSON block: responsive and scrollable if needed */
+.raw-json {
+  background: rgba(0,0,0,0.6);
+  color: #e6eef8;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  overflow: auto; /* allow horizontal scroll on very long lines */
+  max-height: 60vh;
+  white-space: pre-wrap; /* wrap long strings */
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+/* Footer styling: solid color and spacing so it doesn't blend with results */
+.siteFooter {
+  background: #0b1220;
+  color: #fff;
+  padding: 1.25rem;
+  text-align: center;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+/* ensure main content doesn't collide with footer */
+.main-content { padding-bottom: 2rem; }
+
 .result-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #fbbf24;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.85rem;
   text-align: center;
 }
 
@@ -130,10 +184,10 @@
 }
 
 .score-value {
-  font-size: 4rem;
+  font-size: 2.8rem;
   font-weight: 700;
   color: #fbbf24;
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.25);
 }
 
 .reasons {
@@ -174,16 +228,16 @@
   margin-top: 1rem;
 }
 
-@media (max-width: 600px) {
-  .project-title {
-    font-size: 3rem;
-  }
-  
-  .input-container {
-    flex-direction: column;
-  }
-  
-  .run-button {
-    width: 100%;
-  }
+@media (max-width: 900px) {
+ 
+  .project-title { font-size: 1.8rem; }
+  .score-value { font-size: 2rem; }
+  .input-container { max-width: 100%; padding: 0 1rem; }
+}
+
+@media (max-width: 480px) {
+  .project-title { font-size: 1.6rem; }
+  .subtitle { font-size: 0.95rem; }
+  .run-button { width: 100%; }
+  .input-container { flex-direction: column; }
 }
