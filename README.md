@@ -1,66 +1,34 @@
-LemonAid
+# LemonAid
 
-LemonAid analyzes Amazon product listings using the Rainforest API, computes a heuristic "Lemon Score," caches results in MongoDB, and displays the results in a simple React frontend.
+LemonAid is a small full-stack app that analyzes Amazon product listings and flags potentially low-quality or suspicious products. It fetches listing data from the Rainforest API, computes a heuristic "Lemon Score," caches results in MongoDB, and shows everything in a simple React UI.
 
-Features
+## Features
 
-Fetch product data from the Rainforest product endpoint
+- Analyze Amazon product pages by pasting a URL
+- Extract ASINs from common Amazon URL formats (`/dp/`, `/gp/product/`, query params)
+- Fetch product data from the Rainforest Product API
+- Compute a rule-based Lemon Score (reviews, seller, listing quality, pricing, age)
+- Cache analysis results in MongoDB with a TTL index to save API calls
+- Return cached results instantly when the same ASIN is requested again
+- React frontend with score, label, breakdown, reasons, and optional raw JSON
 
-Compute a rule-based Lemon Score (reviews, seller, price, listing quality, age)
+## API Used
 
-Cache results in MongoDB with a TTL index
+LemonAid uses the Rainforest Amazon Product API.
 
-Return cached analysis if the ASIN already exists
+- Endpoint: Rainforest Product endpoint (ASIN-based lookup)
+- Usage: backend calls Rainforest with the extracted ASIN, then passes the response into a custom analyzer that computes the Lemon Score and flags
 
-React UI (Vite + React) with optional raw JSON view and score breakdown
+You must provide your own `RAINFOREST_API_KEY` via environment variables.
 
-API Used
+## Database & Caching
 
-Rainforest API (Amazon Product API).
-Primary endpoint: product data lookup for an ASIN.
-Backend extracts ASIN from URLs containing /dp/, /gp/product/, or query parameters.
+LemonAid uses MongoDB for persistence and caching.
 
-Database
+- Database: MongoDB (Atlas or local)
+- Stored fields (per listing): `listingId` (ASIN), `raw` Rainforest data, `analysis` (Lemon Score, breakdown, reasons), `fetchedAt`
+- Caching:
+  - On each request, the backend checks MongoDB for an existing document with the same `listingId`
+  - If found and not expired, it returns the cached analysis instead of calling Rainforest again
+  - A TTL index on `fetchedAt` automatically expires old entries after a configured number of days (default ~7 days)
 
-MongoDB (Atlas or local).
-Stores: listingId, raw Rainforest response, computed analysis, fetchedAt timestamp.
-Caching: TTL index expires entries after 7 days.
-Upsert logic ensures listings are inserted or updated on each analysis.
-
-Backend
-
-Node.js and Express.
-Main route: POST /api/url-post
-Body example: {"url": "https://www.amazon.com/dp/B012345678"}
-
-Response includes itemId, analysis, raw Rainforest data, cached flag, and saved record ID.
-
-Running the Project
-
-Backend:
-cd backend
-npm install
-npm run dev
-
-Frontend:
-cd frontend
-npm install
-npm run dev
-
-Environment Variables
-
-Create backend/.env:
-
-MONGO_URI=...
-RAINFOREST_API_KEY=...
-PORT=3000
-
-If MONGO_URI is omitted, caching is disabled but the backend still runs.
-
-Build (Production)
-
-Frontend:
-npm run build
-
-Backend:
-NODE_ENV=production node ./bin/www
