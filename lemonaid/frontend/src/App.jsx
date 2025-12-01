@@ -60,6 +60,33 @@ function App() {
     }
   }
 
+  const getRisk = (score) => {
+    if (score >= 80) {
+      return {
+        label: "High Risk",
+        color: "#DC2626"
+      }
+    }
+    if (score >= 50) {
+      return {
+        label: "Moderate Risk",
+        color: "#F97316"
+      }
+    }
+    if (score >= 20) {
+      return {
+        label: "Low Risk",
+        color: "#16A34A"
+      }
+    }
+    else {
+      return {
+        label: "Undefined",
+        color: "#4F007CFF"
+      }
+    }
+  }
+
   return (
     <div className="app-container">
       <div className="content">
@@ -97,6 +124,19 @@ function App() {
             <div className="lemon-score">
               <div className="score-label">Lemon Score</div>
               <div className="score-value">{result.lemonScore}</div>
+              <div
+                className="risk-tag"
+                style={{backgroundColor: getRisk(result.lemonScore).color}}
+              >
+                {getRisk(result.lemonScore).label}
+              </div>
+            </div>
+            <div className="listing-overview">
+              <h3>Listing Overview</h3>
+              <p><strong>Title:</strong> {result?.title || 'N/A'}</p>
+              <p><strong>Price:</strong> {result?.price || 'N/A'}</p>
+              <p><strong>Median Price:</strong> ${result?.medianPrice || 'N/A'}</p>
+              <p><strong>Z-Score:</strong> {result?.zScore || 'N/A'}</p>
             </div>
             <div className="reasons">
               <h3>Key Factors:</h3>
@@ -106,7 +146,6 @@ function App() {
                 ))}
               </ul>
             </div>
-            <p className="status-message">{result.status}</p>
           </div>
         )}
       </div>
