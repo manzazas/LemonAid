@@ -79,11 +79,9 @@ function App() {
         color: "#16A34A"
       }
     }
-    else {
-      return {
-        label: "Undefined",
-        color: "#4F007CFF"
-      }
+    return {
+      label: "Very Low Risk",
+      color: "#059669"
     }
   }
 
@@ -123,7 +121,7 @@ function App() {
             <h2 className="result-title">Analysis Complete</h2>
             <div className="lemon-score">
               <div className="score-label">Lemon Score</div>
-              <div className="score-value">{result.lemonScore}</div>
+              <div className="score-value">{result.lemonScore ?? '—'}</div>
               <div
                 className="risk-tag"
                 style={{backgroundColor: getRisk(result.lemonScore).color}}
@@ -135,17 +133,24 @@ function App() {
               <h3>Listing Overview</h3>
               <p><strong>Title:</strong> {result?.title || 'N/A'}</p>
               <p><strong>Price:</strong> {result?.price || 'N/A'}</p>
-              <p><strong>Median Price:</strong> ${result?.medianPrice || 'N/A'}</p>
+              <p><strong>Median Price:</strong> {result?.medianPrice ? `$${result.medianPrice}` : 'N/A'}</p>
               <p><strong>Z-Score:</strong> {result?.zScore || 'N/A'}</p>
             </div>
             <div className="reasons">
               <h3>Key Factors:</h3>
               <ul>
-                {result.reasons.map((reason, index) => (
-                  <li key={index}>{reason}</li>
-                ))}
+                {result.reasons && result.reasons.length > 0 ? (
+                  result.reasons.map((reason, index) => (
+                    <li key={index}>{reason}</li>
+                  ))
+                ) : (
+                  <li>No specific flags detected</li>
+                )}
               </ul>
             </div>
+            {result.status && (
+              <p className="status-message">{result.status}</p>
+            )}
           </div>
         )}
       </div>
