@@ -41,17 +41,29 @@ function App() {
 			const data = await response.json()
 			const analysis = data.analysis || {}
 			const lemon = analysis.lemon || {}
+			const product = data.rainforestData?.product || data.product || null;
+			const productImage = product?.main_image?.link || product?.images?.[0]?.link || null;
+			const productUrl = product?.link || url;
+			
 			const mapped = {
 				lemonScore: analysis.score ?? null,
 				label: lemon.label || null,
 				breakdown: lemon.breakdown || {},
 				reasons: lemon.reasons || (analysis.reasons || []),
-				productSummary: analysis.productSummary || (data.rainforestData && (data.rainforestData.product || null)) || null,
+				productSummary: analysis.productSummary || product || null,
+				productImage: productImage,
+				productUrl: productUrl,
 				raw: data || analysis || null,
 				saved: data.saved || false,
 			}
 
 			setResult(mapped)
+			setTimeout(() => {
+				const resultElement = document.querySelector('.result-container')
+				if (resultElement) {
+					resultElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+				}
+			}, 100)
 		} catch (err) {
 			setError(err.message || 'An error occurred while analyzing the listing')
 			console.error('Error:', err)
@@ -88,11 +100,18 @@ function App() {
 
 					{error && <div className="error-message">{error}</div>}
 
+					{loading && (
+						<div className="loading-container">
+							<div className="loading-spinner"></div>
+							<p className="loading-text">Analyzing product... This may take a few seconds.</p>
+						</div>
+					)}
+
 					{result && (
-						<div className="result-container">
+						<div className="result-container fade-in">
 							<h2 className="result-title">Analysis Complete</h2>
 
-							<div className="lemon-score">
+							<div className={`lemon-score score-${result.lemonScore < 20 ? 'low' : result.lemonScore < 50 ? 'medium' : 'high'}`}>
 								<div className="score-label">Lemon Score</div>
 								<div className="score-value">{result.lemonScore ?? '—'}</div>
 								<div className="score-badge">{result.label ?? ''}</div>
@@ -101,28 +120,60 @@ function App() {
 							{result.productSummary && (
 								<div className="product-summary">
 									<h3>Product</h3>
-									<div className="product-title">{result.productSummary.title}</div>
-									<div className="product-meta">
-										<span>ASIN: {result.productSummary.asin}</span>
-										{result.productSummary.rating != null && (
-											<span>
-												{' '}
-												| Rating: {result.productSummary.rating} ({result.productSummary.ratings_total || 0})
-											</span>
+									<div className="product-content">
+										{result.productImage && (
+											<div className="product-image-container">
+												<img src={result.productImage} alt={result.productSummary.title} className="product-image" />
+											</div>
 										)}
-										{result.productSummary.price && (
-											<span> | Price: {result.productSummary.price.value} {result.productSummary.price.currency}</span>
-										)}
+										<div className="product-details">
+											<div className="product-title">{result.productSummary.title}</div>
+											<div className="product-meta">
+												<span>ASIN: {result.productSummary.asin}</span>
+												{result.productSummary.rating != null && (
+													<span>
+														{' '}
+														| Rating: {result.productSummary.rating} ({result.productSummary.ratings_total || 0})
+													</span>
+												)}
+												{result.productSummary.price && (
+													<span> | Price: {result.productSummary.price.value} {result.productSummary.price.currency}</span>
+												)}
+											</div>
+											{result.productUrl && (
+												<a href={result.productUrl} target="_blank" rel="noopener noreferrer" className="amazon-link">
+													View on Amazon →
+												</a>
+											)}
+										</div>
 									</div>
 								</div>
 							)}
 
 							<div className="breakdown">
 								<h3>Breakdown</h3>
+								<p className="breakdown-note">Lower scores = Better (Low = Good, High = Bad)</p>
 								<ul>
-									{Object.entries(result.breakdown || {}).map(([k, v]) => (
-										<li key={k}><strong>{k}:</strong> {v}</li>
-									))}
+									{Object.entries(result.breakdown || {}).map(([k, v]) => {
+										const score = Number(v) || 0;
+										const isGood = score === 0;
+										const isMedium = score > 0 && score < 20;
+										const isBad = score >= 20;
+										const tooltips = {
+											reviews: 'Review quality and quantity. Low score = good reviews, high score = suspicious or poor reviews.',
+											seller: 'Seller reliability. Low score = Amazon fulfilled, high score = third-party seller risks.',
+											price: 'Price comparison with similar products. Low score = normal pricing, high score = unusually high/low prices.',
+											listing: 'Listing quality (images, descriptions). Low score = professional listing, high score = spammy or low-quality.',
+											age: 'Product age vs review count. Low score = normal, high score = new product with suspiciously many reviews.'
+										};
+										return (
+											<li key={k} className={`breakdown-item ${isGood ? 'score-good' : isBad ? 'score-bad' : 'score-medium'}`} title={tooltips[k] || ''}>
+												<strong>{k}:</strong> {v}
+												{isGood && <span className="score-indicator"> ✓ Good</span>}
+												{isBad && <span className="score-indicator"> ⚠ Risk</span>}
+											</li>
+										);
+									})}
 								</ul>
 							</div>
 

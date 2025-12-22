@@ -2,14 +2,13 @@ html, body {
   height: 100%;
 }
 
-/* sensible base font size for consistent sizing */
 html { font-size: 16px; }
 body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; color: #e6eef8; background: #111218; }
 #root {
   width: 100%;
   max-width: none; 
   margin: 0;
-  
+  background: #111218;
   min-height: 100vh;
   box-sizing: border-box;
 }
@@ -20,13 +19,14 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
   padding: 1.25rem;
 }
 
-/* Ensure content doesn't sit under a sticky header */
 .content {
   padding-top: 1rem;
 }
 
 .app-container {
   width: 100%;
+  min-height: 100vh;
+  background: #111218;
 }
 
 .content {
@@ -113,6 +113,31 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
   transform: none;
 }
 
+.loading-container {
+  margin-top: 2rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(251, 191, 36, 0.2);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
 .error-message {
   margin-top: 1rem;
   padding: 0.875rem 1.25rem;
@@ -126,33 +151,115 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
 .result-container {
   margin-top: 1.5rem;
   padding: 1.25rem;
-  /* use a solid panel color to avoid full-width translucent banding */
-  background-color: #0f1113; /* slightly lighter than page background */
+  background-color: #0f1113;
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.03);
   box-shadow: 0 6px 18px rgba(0,0,0,0.45);
   text-align: left;
 }
 
-/* Make product-meta wrap cleanly on small screens */
-.product-meta { display:block; color: #cbd5e1; margin-top: .5rem; }
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
 
-/* Raw JSON block: responsive and scrollable if needed */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.product-summary {
+  margin-bottom: 1.5rem;
+}
+
+.product-summary h3 {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  margin-bottom: 0.75rem;
+}
+
+.product-content {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.product-image-container {
+  flex-shrink: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.product-meta {
+  display: block;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+
+.amazon-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.amazon-link:hover {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-1px);
+}
+
 .raw-json {
   background: rgba(0,0,0,0.6);
   color: #e6eef8;
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
-  overflow: auto; /* allow horizontal scroll on very long lines */
+  overflow: auto;
   max-height: 60vh;
-  white-space: pre-wrap; /* wrap long strings */
+  white-space: pre-wrap;
   word-break: break-word;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace;
   font-size: 0.9rem;
 }
 
-/* Footer styling: solid color and spacing so it doesn't blend with results */
 .siteFooter {
   background: #0b1220;
   color: #fff;
@@ -162,7 +269,6 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
   border-top: 1px solid rgba(255,255,255,0.03);
 }
 
-/* ensure main content doesn't collide with footer */
 .main-content { padding-bottom: 2rem; }
 
 .result-title {
@@ -186,8 +292,94 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
 .score-value {
   font-size: 2.8rem;
   font-weight: 700;
+  text-shadow: 0 0 12px rgba(251, 191, 36, 0.25);
+}
+
+.score-low .score-value {
+  color: #10b981;
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+.score-medium .score-value {
   color: #fbbf24;
   text-shadow: 0 0 12px rgba(251, 191, 36, 0.25);
+}
+
+.score-high .score-value {
+  color: #ef4444;
+  text-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+}
+
+.score-badge {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.breakdown {
+  margin-bottom: 1.5rem;
+}
+
+.breakdown h3 {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.breakdown-note {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+.breakdown ul {
+  list-style: none;
+  padding: 0;
+}
+
+.breakdown li {
+  padding: 0.5rem 0;
+  color: #cbd5e1;
+  border-bottom: 1px solid #334155;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breakdown li:last-child {
+  border-bottom: none;
+}
+
+.breakdown-item {
+  cursor: help;
+  position: relative;
+}
+
+.breakdown-item strong {
+  text-transform: capitalize;
+  min-width: 80px;
+}
+
+.score-indicator {
+  font-size: 0.85rem;
+  margin-left: auto;
+}
+
+.score-good .score-indicator {
+  color: #10b981;
+}
+
+.score-medium .score-indicator {
+  color: #f59e0b;
+}
+
+.score-bad .score-indicator {
+  color: #ef4444;
 }
 
 .reasons {
@@ -240,4 +432,18 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
   .subtitle { font-size: 0.95rem; }
   .run-button { width: 100%; }
   .input-container { flex-direction: column; }
+  
+  .product-content {
+    flex-direction: column;
+  }
+  
+  .product-image-container {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  
+  .product-image {
+    height: auto;
+  }
 }
