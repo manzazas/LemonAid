@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import styles from './Header.module.css'
-import logo from '../assets/lemonaid logo.png'
 
 export default function Header({ onHome }) {
   const handleHome = (e) => {
@@ -13,7 +12,6 @@ export default function Header({ onHome }) {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link to="/" className={styles.brand} onClick={handleHome}>
-          <img src={logo} alt="LemonAid logo" className={styles.logo} />
           <span className={styles.siteName}>LemonAid</span>
         </Link>
 
