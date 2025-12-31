@@ -10,14 +10,25 @@ function safeNumber(v) {
 }
 
 function reviewScore(p) {
+  if (!p || typeof p !== 'object') {
+    console.warn('reviewScore: Invalid product object');
+    return 0;
+  }
+  
   const rating = safeNumber(p.rating);
   const ratings_total = safeNumber(p.ratings_total) || safeNumber(p.reviews_total) || 0;
+  
+  // Debug logging
+  if (ratings_total === 0 && rating === null) {
+    console.warn('reviewScore: No rating or ratings_total found. Product keys:', Object.keys(p));
+  }
+  
   let score = 0;
   if (ratings_total < 20) score += 20; // not much data
   if (rating !== null && rating < 3.5) score += 40; // consistently bad
   if (rating !== null && rating >= 4.8 && ratings_total < 30) score += 25; // suspiciously perfect
   return Math.max(0, Math.min(60, Math.round(score)));
-}
+}                         
 
 function sellerScore(p) {
   let score = 0;
@@ -77,7 +88,7 @@ function computeLemonScore(product) {
   const breakdown = {
     reviews: reviewScore(product),
     seller: sellerScore(product),
-    price: priceScore(product),
+    price: priceScore(product),                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     listing: listingScore(product),
     age: ageScore(product),
   };
@@ -103,8 +114,14 @@ function computeLemonScore(product) {
 
 export default function analyze(raw) {
   // raw is expected to be the full Rainforest response (object)
-  const product = raw && (raw.product || raw.product_data || raw);
-  if (!product) {
+  // Handle nested structure: raw.product or raw.rainforestData?.product or raw itself
+  let product = null;
+  if (raw) {
+    product = raw.product || raw.product_data || (raw.rainforestData && raw.rainforestData.product) || raw;
+  }
+  
+  if (!product || typeof product !== 'object') {
+    console.warn('Analyze: No product data found in:', Object.keys(raw || {}));
     return {
       score: null,
       lemonScore: null,
