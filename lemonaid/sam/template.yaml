@@ -2,6 +2,16 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: LemonAid Express app deployed with AWS SAM (Lambda + HTTP API)
 
+Parameters:
+  RainforestApiKey:
+    Type: String
+    NoEcho: true
+    Description: Rainforest API key
+  MongoUri:
+    Type: String
+    NoEcho: true
+    Description: MongoDB connection string
+
 Globals:
   Function:
     Runtime: nodejs22.x
@@ -47,9 +57,8 @@ Resources:
       Environment:
         Variables:
           NODE_ENV: production
-          # TODO: Replace these with your actual API keys from your .env file
-          RAINFOREST_API_KEY: "***REMOVED***"
-          MONGO_URI: "***REMOVED***?retryWrites=true&w=majority"
+          RAINFOREST_API_KEY: !Ref RainforestApiKey
+          MONGO_URI: !Ref MongoUri
       Events:
         Root:
           Type: HttpApi
