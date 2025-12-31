@@ -8,7 +8,7 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
   width: 100%;
   max-width: none; 
   margin: 0;
-  background: #111218;
+  background: #ff1493;
   min-height: 100vh;
   box-sizing: border-box;
 }
@@ -26,7 +26,7 @@ body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neu
 .app-container {
   width: 100%;
   min-height: 100vh;
-  background: #111218;
+  background: #ff1493;
 }
 
 .content {
