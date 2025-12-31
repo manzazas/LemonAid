@@ -8,7 +8,14 @@ import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-connectDB(); // <<< connects to Mongo
+
+// Connect to MongoDB only if MONGO_URI is set (optional for Lambda)
+if (process.env.MONGO_URI) {
+  connectDB().catch(err => {
+    console.error('MongoDB connection failed:', err.message);
+    // Continue without DB - API will still work without caching
+  });
+}
 
 import indexRouter from './routes/index.js';
 import externalRouter from './routes/external.js';
