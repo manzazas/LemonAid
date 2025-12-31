@@ -19,11 +19,11 @@ jobs:
           node-version: '18'
 
       - name: Install frontend dependencies
-        working-directory: ./frontend
+        working-directory: ./lemonaid/frontend
         run: npm install
 
       - name: Build frontend
-        working-directory: ./frontend
+        working-directory: ./lemonaid/frontend
         run: npm run build
 
       - name: Configure AWS credentials
@@ -34,7 +34,7 @@ jobs:
           aws-region: us-west-2
 
       - name: Upload to S3
-        run: aws s3 sync frontend/dist/ s3://lemon-aid-staticwebsitebucket-ebgmlm1iy92i --delete
+        run: aws s3 sync lemonaid/frontend/dist/ s3://lemon-aid-staticwebsitebucket-ebgmlm1iy92i --delete
 
       - name: Invalidate CloudFront cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
@@ -61,13 +61,13 @@ jobs:
           aws-region: us-west-2
 
       - name: Install backend dependencies
-        working-directory: ./backend
+        working-directory: ./lemonaid/backend
         run: npm install
 
       - name: SAM build
-        working-directory: ./sam
+        working-directory: ./lemonaid/sam
         run: sam build
 
       - name: SAM deploy
-        working-directory: ./sam
+        working-directory: ./lemonaid/sam
         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
