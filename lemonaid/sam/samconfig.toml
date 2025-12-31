@@ -8,6 +8,7 @@ region = "us-west-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
+parameter_overrides = "RainforestApiKey=\"YOUR_API_KEY_HERE\" MongoUri=\"YOUR_MONGO_URI_HERE\""
 
 [default.global.parameters]
 region = "us-west-2"

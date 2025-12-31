@@ -70,4 +70,4 @@ jobs:
 
       - name: SAM deploy
         working-directory: ./lemonaid/sam
-        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --parameter-overrides "RainforestApiKey=${{ secrets.RAINFOREST_API_KEY }} MongoUri=${{ secrets.MONGO_URI }}"
