@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: LemonAid Express app deployed with AWS SAM (Lambda + HTTP API)
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Timeout: 30           # seconds (increased for API calls)
+    MemorySize: 512
+    Architectures:
+      - x86_64
+
+Resources:
+  ExpressHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "http://localhost:5173"
+          - "http://localhost:3000"
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+          - X-Amz-Date
+          - X-Api-Key
+          - X-Amz-Security-Token
+          - X-Amz-User-Agent
+        ExposeHeaders:
+          - Content-Type
+          - X-Amz-Apigw-Integration-Type
+        AllowCredentials: false
+        MaxAge: 600
+
+  ExpressFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../backend/
+      Handler: lambda.handler    # lambda.js exports.handler
+      Description: Express app behind HTTP API
+      Environment:
+        Variables:
+          NODE_ENV: production
+          # TODO: Replace these with your actual API keys from your .env file
+          RAINFOREST_API_KEY: "***REMOVED***"
+          MONGO_URI: "***REMOVED***?retryWrites=true&w=majority"
+      Events:
+        Root:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ExpressHttpApi
+            Path: /
+            Method: ANY
+        ProxyApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ExpressHttpApi
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiBaseUrl:
+    Description: Base URL for the Express HTTP API
+    Value: !Sub "https://${ExpressHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  ExpressFunctionArn:
+    Description: ARN of the Lambda function running Express
+    Value: !GetAtt ExpressFunction.Arn
+  ApiEndpoint:
+    Description: Full API endpoint URL
+    Value: !Sub "https://${ExpressHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
