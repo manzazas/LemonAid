@@ -3,7 +3,8 @@ name: Deploy to AWS
 on:
   push:
     branches:
-      - Main  # Triggers on push to Main branch
+      - Main
+  workflow_dispatch:  # Allows manual triggering  
 
 jobs:
   deploy-frontend:
