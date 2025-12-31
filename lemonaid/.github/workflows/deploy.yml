@@ -3,7 +3,7 @@ name: Deploy to AWS
 on:
   push:
     branches:
-      - main  # Triggers on push to main branch
+      - Main  # Triggers on push to Main branch
 
 jobs:
   deploy-frontend:
