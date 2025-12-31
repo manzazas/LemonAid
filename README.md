@@ -32,7 +32,9 @@ LemonAid uses MongoDB for persistence and caching.
   - If found and not expired, it returns the cached analysis instead of calling Rainforest again
   - A TTL index on `fetchedAt` automatically expires old entries after a configured number of days (default ~7 days)
 
+## Future Scaling
 
+We are aware of other potential online shopping sites such as Etsy and Ebay, however we need to wait some time before getting approved to use their API. That is why we opted for Amazon
 
  
 ## Getting Started
